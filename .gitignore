@@ -1,0 +1,59 @@
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.coverage
+htmlcov/
+
+# Environments
+.venv/
+venv/
+env/
+ENV/
+
+# IDE and OS
+.idea/
+.vscode/
+.claude/
+.opencode/
+*.swp
+*.swo
+.DS_Store
+Thumbs.db
+
+# Experiment outputs and checkpoints
+results/
+results_final/
+outputs/
+runs/
+logs/
+checkpoints/
+*.pt
+*.pth
+*.ckpt
+
+# Large generated or external datasets
+data/**/*.hdf5
+data/**/*.h5
+data/raw/
+
+# Paper/build artifacts
+paper/
+.a/
+.ea/
+*.aux
+*.bbl
+*.blg
+*.log
+*.out
+*.synctex.gz
+
+# Local scratch files
+tmp/
+scratch/
+*.bak
+*.tmp

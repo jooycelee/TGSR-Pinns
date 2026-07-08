@@ -1,0 +1,55 @@
+{
+    "experiment_name": "Task2D_HighPeclet",
+    "physics": {
+        "type": "heat_2d_convection",
+        "domain": [
+            0,
+            1
+        ],
+        "params": {
+            "alpha": 0.005,
+            "vx": 1.0,
+            "vy": 0.5
+        },
+        "true_params": {
+            "alpha": 0.001,
+            "vx": 2.0,
+            "vy": 1.0
+        },
+        "noise_level": 0.005
+    },
+    "model": {
+        "layers": [
+            3,
+            100,
+            100,
+            100,
+            100,
+            100,
+            100,
+            1
+        ],
+        "activation": "tanh"
+    },
+    "training": {
+        "transfer_ratio": 0.5,
+        "epochs_adam": 0,
+        "epochs_lbfgs": 300,
+        "learning_rate": 0.002,
+        "lbfgs_lr": 0.1,
+        "batch_size_pde": 10000,
+        "batch_size_bc": 2500,
+        "batch_size_ic": 2500,
+        "batch_size_data": 1000,
+        "use_data_loss": true,
+        "fixed_data_loss": true,
+        "fixed_data_size": 1000,
+        "weights": {
+            "pde": 10.0,
+            "ic": 10.0,
+            "bc": 10.0,
+            "data": 50.0
+        },
+        "log_freq": 100
+    }
+}

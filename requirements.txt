@@ -1,0 +1,9 @@
+# Core runtime
+torch>=1.13.0
+numpy>=1.20.0
+matplotlib>=3.5.0
+tqdm>=4.60.0
+scipy>=1.10.0
+
+# Tests
+pytest>=7.0.0
