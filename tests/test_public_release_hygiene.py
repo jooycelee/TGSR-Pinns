@@ -10,7 +10,6 @@ DOT_EA = "." + "ea"
 RESULTS_FINAL = "results" + "_final"
 PUBLIC_PATTERNS = [
     "README*.md",
-    "REPRODUCE.md",
     "scripts/*.py",
     "experiments/runners/*.py",
 ]

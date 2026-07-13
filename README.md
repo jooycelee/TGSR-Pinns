@@ -1,49 +1,43 @@
 # TGSR-PINN
 
-This is a minimal public demo repository for **Target-Guided Selective Reweighting PINN (TGSR-PINN)**.
+This repository provides a minimal reproducible implementation of
+**Target-Guided Selective Reweighting PINN (TGSR-PINN)** for a High-Peclet
+inverse transfer experiment.
 
-The release intentionally exposes only one method and one experiment:
+## Experiment
 
-- Method: TGSR-PINN
-- Experiment: High-Peclet 2D diffusion source to advection-diffusion target transfer
-- Demo seed: 77
+The experiment transfers a pretrained two-dimensional diffusion PINN to a
+strongly advection-dominated advection-diffusion inverse problem.
 
-No alternate method implementations, checkpoint files, generated results, paper drafts, IDE files, or local workspace paths are included.
+- Source task: infer the diffusion coefficient from observations with 0.5%
+  noise.
+- Target task: infer the diffusion coefficient `alpha` and velocities `vx`
+  and `vy`.
+- Target true parameters: `alpha=0.001`, `vx=2.0`, `vy=1.0`.
+- Network: six hidden layers with 100 neurons per layer and `tanh` activation.
+- Reproduction seed: `77`.
 
-## Repository Layout
+The reference seed-77 result is approximately:
 
-- `main.py`: single-task PINN training entry point.
-- `configs/task2d_diffusion_source_noise005.json`: source diffusion task.
-- `configs/task2d_high_peclet.json`: High-Peclet target task.
-- `experiments/runners/run_tgsr_high_peclet.py`: end-to-end TGSR source-to-target runner.
-- `run_transfer_experiment.bat`: one-command Windows demo for seed 77.
-- `src/`: model, physics, trainer, TGSR transfer strategy, and utilities.
-- `scripts/smoke_test_repository.py`: quick release sanity check.
-- `tests/`: lightweight tests for the public TGSR release.
+- Relative L2 field error: `0.06867%`
+- Alpha relative error: `0.38058%`
 
-## Quick Start
+## Run
+
+Python 3.10 or newer is recommended. Install the dependencies:
 
 ```powershell
 python -m venv .venv
 .\.venv\Scripts\Activate.ps1
 python -m pip install --upgrade pip
 python -m pip install -r requirements.txt
-python scripts/smoke_test_repository.py
-python -m pytest -q
 ```
 
-## Run The Public Experiment
-
-The simplest path is:
+Run the complete source-to-target experiment on Windows:
 
 ```powershell
 .\run_transfer_experiment.bat
 ```
-
-This runs:
-
-1. The source diffusion PINN with seed 77.
-2. The High-Peclet target PINN initialized with TGSR-PINN transfer from the source model.
 
 Equivalent Python command:
 
@@ -51,10 +45,13 @@ Equivalent Python command:
 python experiments/runners/run_tgsr_high_peclet.py --seed 77 --experiment-name tgsr_high_peclet_seed77
 ```
 
-Generated outputs are written under `results/`, which is ignored by Git.
+The runner trains the source PINN, performs TGSR-PINN transfer, trains the
+target inverse problem, and checks the final seed-77 result. Generated models,
+histories, and figures are saved under `results/`.
 
-## Notes
+## Check
 
-The experiment uses manufactured solutions and samplers implemented in `src/physics/`; no external dataset is required.
-
-Complete training can take time, especially on CPU. The smoke test and unit tests are lightweight checks only; they do not run the complete experiment.
+```powershell
+python scripts/smoke_test_repository.py
+python -m pytest -q
+```

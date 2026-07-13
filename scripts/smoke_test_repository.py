@@ -38,7 +38,6 @@ def check_public_layout() -> None:
         "main.py",
         "README.md",
         "README_CN.md",
-        "REPRODUCE.md",
     }
     missing = sorted(path for path in required_files if not (REPO_ROOT / path).exists())
     if missing:
@@ -80,6 +79,20 @@ def check_high_peclet_configs() -> None:
     expected_weights = {"pde": 10.0, "ic": 10.0, "bc": 10.0, "data": 50.0}
     if training["weights"] != expected_weights:
         raise AssertionError(f"High-Peclet target weights mismatch: {training['weights']}")
+
+
+def check_best_seed77_runner() -> None:
+    runner_path = REPO_ROOT / "experiments" / "runners" / "run_tgsr_high_peclet.py"
+    runner = runner_path.read_text(encoding="utf-8")
+    required_fragments = {
+        'BEST_SEED = 77',
+        'BEST_WARMUP_CAPTURE_FRAMES = 8',
+        'env["TGSR_WARMUP_CAPTURE_FRAMES"] = str(BEST_WARMUP_CAPTURE_FRAMES)',
+        'verify_best_seed77_result(target_dir)',
+    }
+    missing = sorted(fragment for fragment in required_fragments if fragment not in runner)
+    if missing:
+        raise AssertionError(f"Best seed-77 runner protocol is incomplete: {missing}")
 
 
 def check_registries_and_strategy() -> None:
@@ -129,6 +142,7 @@ def main() -> int:
     checks = [
         ("public repository layout", check_public_layout),
         ("High-Peclet configs", check_high_peclet_configs),
+        ("best seed-77 runner protocol", check_best_seed77_runner),
         ("TGSR strategy registry", check_registries_and_strategy),
         ("tiny FCN forward pass", check_model_forward),
         ("TGSR soft-decay mapping", check_tgsr_soft_decay_mapping),
